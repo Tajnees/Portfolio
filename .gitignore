@@ -11,6 +11,7 @@
 /out/
 # Allow docs folder for GitHub Pages
 !/docs
+!.nojekyll
 
 # production
 /build
