@@ -7,6 +7,8 @@ import Link from "next/link";
 // It expects Tailwind CSS to be configured in the project and Framer Motion installed.
 // Place a `cv.pdf` file in the `public/` folder to enable the Download CV button.
 
+const basePath = '/Portfolio';
+
 const projects = [
   {
     id: "metric",
@@ -15,7 +17,7 @@ const projects = [
       "A comprehensive fintech platform providing real-time financial analytics, reporting dashboards, and data visualization tools to help businesses track performance metrics and make data-driven decisions.",
     url: "https://web.metricapp.co/login",
     tech: ["React", "Next.js", "Node", "Postgres", "AWS"],
-    image: "/projects/metric.jpeg",
+    image: `${basePath}/projects/metric.jpeg`,
   },
   {
     id: "sababa",
@@ -24,7 +26,7 @@ const projects = [
       "AI agent ecosystem for customer support automation with intelligent ChatGPT integration, custom AI agents, N8n workflow automation, and real-time analytics dashboards.",
     url: "https://app.sababa.global/login",
     tech: ["Vue 3", "Node", "Next.js", "N8n", "WebSockets", "Azure"],
-    image: "/projects/sababa.png",
+    image: `${basePath}/projects/sababa.png`,
   },
   {
     id: "remap",
@@ -33,7 +35,7 @@ const projects = [
       "Scalable microservices and Next.js frontend handling hundreds of thousands of concurrent connections.",
     url: "https://app1.busi.chat/login",
     tech: ["Next.js", "Node", "Docker", "GCP"],
-    image: "/projects/remap.jpeg",
+    image: `${basePath}/projects/remap.jpeg`,
   },
 ];
 
@@ -74,7 +76,7 @@ export default function PortfolioPage() {
 
           <div className="flex items-center gap-3">
             <a
-              href="/cv.pdf"
+              href={`${basePath}/cv.pdf`}
               download
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium shadow hover:bg-blue-700 focus:outline-none"
             >
@@ -164,7 +166,7 @@ export default function PortfolioPage() {
 
             <div className="mt-6 flex gap-3">
               <a
-                href="/cv.pdf"
+                href={`${basePath}/cv.pdf`}
                 download
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white shadow hover:bg-blue-700"
               >
