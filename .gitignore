@@ -9,6 +9,8 @@
 # next.js
 /.next/
 /out/
+# Allow docs folder for GitHub Pages
+!/docs
 
 # production
 /build
