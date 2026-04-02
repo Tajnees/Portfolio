@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-
+ 
 // NOTE: Place your schematic images in public/projects/
 const projects = [
   {
