@@ -5,6 +5,46 @@ import Image from "next/image";
 // NOTE: Place your schematic images in public/projects/
 const projects = [
   {
+    id: "metric-app",
+    title: "Metric App – Financial Intelligence Dashboard",
+    role: "Senior Full Stack Developer",
+    description: "The core Metric platform where founders connect QuickBooks, Zoho, or Xero and ask Max, an AI CFO, plain language questions about cash flow, runway, and spending. Led frontend architecture with Next.js and React, SSR and SSG, and built the backend APIs powering real time financial dashboards.",
+    impact: "1M+ Transactions Processed, 25% Faster Load Times",
+    url: "https://web.metricapp.co/login",
+    tech: ["Next.js", "React", "Node", "Postgres"],
+    image: "/projects/metric-app.png",
+  },
+  {
+    id: "metric-website",
+    title: "Metric – Marketing Website",
+    role: "Full Stack Contributor",
+    description: "The public facing site introducing Max, the AI CFO, to founders across 190+ countries, communicating product value, integrations, and pricing, and driving free trial sign ups and demo bookings.",
+    impact: "200K+ Business Owners Reached",
+    url: "https://metricapp.co/",
+    tech: ["Next.js", "Frontend", "Conversion Design"],
+    image: "/projects/metric-website.png",
+  },
+  {
+    id: "aios-app",
+    title: "NexEng AIOS – Platform",
+    role: "Product Owner",
+    description: "AIOS is NexEng's AI operating system for fractional executives, legal, finance, and government, coordinating purpose built agents, Communication Hub, Investment Intelligence, Simply Sign, and more, across cloud or on-premises deployments. Owned product direction, ran live demos, and gathered requirements directly from prospective clients.",
+    impact: "12+ Live AI Agents, 14,000+ Client Engagements",
+    url: "https://aios.nexeng.ai/",
+    tech: ["AIOS", "Product Strategy", "Demo Enablement"],
+    image: "/projects/aios-app.png",
+  },
+  {
+    id: "aios-website",
+    title: "NexEng AI – Marketing Website",
+    role: "Full Stack Contributor",
+    description: "The public site for NexEng AI, positioning AIOS for fractional executives, enterprises, and government, covering deployment models, security posture, and industry specific use cases.",
+    impact: "Cloud + On-Premise Positioning",
+    url: "https://nexeng.ai/",
+    tech: ["Next.js", "Frontend", "Content Strategy"],
+    image: "/projects/aios-website.png",
+  },
+  {
     id: "linkedin-agent",
     title: "LinkedIn Auto-Post Agent",
     role: "Automation Architect",
@@ -35,16 +75,6 @@ const projects = [
     image: "/projects/health.png",
   },
   {
-    id: "metric",
-    title: "Metric – Financial Intelligence Platform",
-    role: "Senior Full Stack",
-    description: "Frontend architecture and backend APIs for Metric, a financial intelligence platform where founders connect QuickBooks, Zoho, or Xero and ask Max, an AI CFO, plain language questions about cash flow, runway, and spending, built for high concurrency real time financial dashboards.",
-    impact: "1M+ Transactions Processed",
-    url: "https://metricapp.co/",
-    tech: ["React", "Node", "Postgres", "AWS"],
-    image: "/projects/metric.png",
-  },
-  {
     id: "sababa",
     title: "Sababa Global – AI Ecosystem",
     role: "AI Engineer",
@@ -55,14 +85,24 @@ const projects = [
     image: "/projects/sababa.png",
   },
   {
-    id: "nexeng-aios",
-    title: "NexEng AIOS – AI Operating System",
-    role: "Product & Growth",
-    description: "AIOS is NexEng's AI operating system for fractional executives, legal, finance, and government, coordinating purpose built agents across email, documents, and client communication in cloud or on-premises deployments. Drove outbound sales strategy, GTM messaging, and demo delivery for the platform.",
-    impact: "580+ Leads Reached, 5 Demos Booked",
-    url: "https://nexeng.ai/",
-    tech: ["Next.js", "AI Agents", "GTM"],
-    image: "/projects/nexeng-aios.png",
+    id: "busichat-app",
+    title: "Busichat – AI Business Platform",
+    role: "Full Stack Developer",
+    description: "An AI powered platform integrating voice agents, workflow automation, and payment systems, built to streamline business operations and enhance user interaction.",
+    impact: "Voice + Payment Automation",
+    url: "#",
+    tech: ["Next.js", "Node", "OpenAI", "Twilio", "AWS"],
+    image: "/projects/busichat.png",
+  },
+  {
+    id: "private-ai-platform",
+    title: "Private AI Platform (Multi-Model)",
+    role: "AI Architect",
+    description: "A secure AI system leveraging agent based workflows and context aware retrieval, RAG, with vector embeddings and controlled access layers for scalable, accurate, and secure knowledge driven automation.",
+    impact: "Secure, Agent Based Workflows",
+    url: "#",
+    tech: ["LLMs", "RAG", "Vector DBs"],
+    image: "/projects/private-ai-platform.png",
   },
 ];
 
@@ -123,7 +163,7 @@ export default function PortfolioPage() {
               Automating <br/> <span className="text-blue-600 dark:text-blue-500 italic">Intelligence.</span>
             </h1>
             <p className="text-lg text-slate-500 dark:text-slate-400 max-w-lg mb-10 leading-relaxed font-medium">
-              Senior Full Stack Developer specializing in <span className="text-slate-900 dark:text-white underline decoration-blue-500/50 underline-offset-4">agentic workflows</span>, high-concurrency systems, and end to end WordPress builds with local SEO.
+              Senior Full Stack Developer specializing in <span className="text-slate-900 dark:text-white underline decoration-blue-500/50 underline-offset-4">agentic workflows</span>, high-concurrency systems, and end to end product and web builds.
             </p>
             <div className="grid grid-cols-2 gap-8">
               {skillGroups.slice(0, 2).map((group) => (
@@ -167,7 +207,7 @@ export default function PortfolioPage() {
         <section>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
             <div>
-              <h2 className="text-4xl font-black uppercase tracking-tighter italic">Selected Agents & Apps</h2>
+              <h2 className="text-4xl font-black uppercase tracking-tighter italic">Selected Work</h2>
               <div className="h-1 w-20 bg-blue-600 mt-3" />
             </div>
             <input
@@ -238,7 +278,7 @@ export default function PortfolioPage() {
 
             <div className="relative z-10 space-y-8">
                 <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter">Ready to Automate?</h2>
-                <p className="text-blue-200/60 max-w-lg mx-auto font-bold uppercase tracking-widest text-xs">Architecting solutions for high-growth startups, and hands on WordPress builds for local businesses.</p>
+                <p className="text-blue-200/60 max-w-lg mx-auto font-bold uppercase tracking-widest text-xs">Architecting solutions for high-growth startups, from core applications to the marketing sites that sell them.</p>
                 <div className="flex flex-col md:flex-row justify-center items-center gap-6">
                     <a href="mailto:tajneesqamar123@gmail.com" className="w-full md:w-auto px-10 py-5 bg-white text-slate-900 rounded-full font-black tracking-widest hover:scale-105 transition-transform text-xs uppercase">Email Inquiry</a>
                     <a href="https://linkedin.com/in/tajnees-qamar-47138212a" className="w-full md:w-auto px-10 py-5 border border-white/20 rounded-full font-black tracking-widest hover:bg-white/10 transition-colors text-xs uppercase">LinkedIn</a>
