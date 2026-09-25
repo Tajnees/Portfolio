@@ -1,81 +1,196 @@
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 
-const basePath = "/Portfolio";
+const mono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-mono",
+});
 
-/** Static files from `public/` must include basePath (see next.config.js). */
-const asset = (path) =>
-  `${basePath}${path.startsWith("/") ? path : `/${path}`}`;
+const sans = IBM_Plex_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-sans",
+});
 
+// NOTE: Place your schematic images in public/projects/
 const projects = [
+  {
+    id: "metric-app",
+    title: "Metric App",
+    subtitle: "Financial Intelligence Dashboard",
+    role: "Senior Full Stack Developer",
+    description:
+      "The core Metric platform where founders connect QuickBooks, Zoho, or Xero and ask Max, an AI CFO, plain language questions about cash flow, runway, and spending. Led frontend architecture with Next.js and React, SSR and SSG, and built the backend APIs powering real time financial dashboards.",
+    impact: "1M+ transactions processed, 25% faster load times",
+    url: "https://web.metricapp.co/login",
+    tech: ["Next.js", "React", "Node", "Postgres"],
+  },
+  {
+    id: "metric-website",
+    title: "Metric",
+    subtitle: "Marketing Website",
+    role: "Full Stack Contributor",
+    description:
+      "The public facing site introducing Max, the AI CFO, to founders across 190+ countries, communicating product value, integrations, and pricing, and driving free trial sign ups and demo bookings.",
+    impact: "200K+ business owners reached",
+    url: "https://metricapp.co/",
+    tech: ["Next.js", "Frontend", "Conversion Design"],
+  },
+  {
+    id: "aios-app",
+    title: "NexEng AIOS",
+    subtitle: "AI Operating System",
+    role: "Product Owner",
+    description:
+      "AIOS is NexEng's AI operating system for fractional executives, legal, finance, and government, coordinating purpose built agents, Communication Hub, Investment Intelligence, Simply Sign, and more, across cloud or on-premises deployments. Owned product direction, ran live demos, and gathered requirements directly from prospective clients.",
+    impact: "12+ live AI agents, 14,000+ client engagements",
+    url: "https://aios.nexeng.ai/",
+    tech: ["AIOS", "Product Strategy", "Demo Enablement"],
+  },
+  {
+    id: "aios-website",
+    title: "NexEng AI",
+    subtitle: "Marketing Website",
+    role: "Full Stack Contributor",
+    description:
+      "The public site for NexEng AI, positioning AIOS for fractional executives, enterprises, and government, covering deployment models, security posture, and industry specific use cases.",
+    impact: "Cloud + on-premise positioning",
+    url: "https://nexeng.ai/",
+    tech: ["Next.js", "Frontend", "Content Strategy"],
+  },
+  {
+    id: "protech-engineering",
+    title: "Protech Engineering",
+    subtitle: "EPCC Corporate Website",
+    role: "Full Stack Developer",
+    description:
+      "A corporate site for an EPCC firm delivering electrical construction, installation, testing, commissioning, and solar EPCC services for power plants, grid stations, and industry across Pakistan, with a projects showcase and client roster.",
+    impact: "Solar EPCC 5KW to 100MW+",
+    url: "https://www.protech-engg.com/",
+    tech: ["Next.js", "Frontend", "Corporate Site"],
+  },
+  {
+    id: "teamio",
+    title: "Teamio",
+    subtitle: "HR Software Platform",
+    role: "Full Stack Developer",
+    description:
+      "An all-in-one HR platform automating payroll, onboarding, attendance, and compliance, with workforce analytics, approval workflows, and support for teams scaling from 10 to 10,000 employees.",
+    impact: "100+ active companies, $200K+ payroll processed",
+    url: "https://www.teamio.io/",
+    tech: ["Next.js", "SaaS", "Payroll"],
+  },
+  {
+    id: "llfgf",
+    title: "Light and Life Full Gospel Fellowship",
+    subtitle: "Church Website",
+    role: "Full Stack Developer",
+    description:
+      "A church website with service schedules, upcoming events, an audio library, and online donations, built to keep the congregation connected and support giving from anywhere.",
+    impact: "Online giving + event updates",
+    url: "https://www.llfgf.org/",
+    tech: ["Next.js", "Donations", "CMS"],
+  },
+  {
+    id: "pixara-ai",
+    title: "Pixara AI",
+    subtitle: "Content Creation Platform",
+    role: "Contributor",
+    description:
+      "An AI content creation platform bringing together top image and video models, Kling, Veo, Midjourney, and more, plus Ara, a built in design agent, into one place so creators can generate video, image, and ad content from a single prompt.",
+    impact: "Multi-model AI content platform",
+    url: "https://www.pixara.ai/",
+    tech: ["AI Platform", "Multimodal Models", "MCP"],
+  },
   {
     id: "linkedin-agent",
     title: "LinkedIn Auto-Post Agent",
+    subtitle: "Automation Workflow",
     role: "Automation Architect",
     description:
       "An n8n workflow utilizing GPT-4 and Serper.dev to track industry news and auto-generate high-engagement technical content.",
-    impact: "300% Organic Reach Growth",
+    impact: "300% organic reach growth",
     url: "#",
     tech: ["n8n", "OpenAI", "Node.js"],
-    image: asset("/projects/linkedin-agent.png"),
-  },
-  {
-    id: "metric",
-    title: "Metric – Fintech Dashboard",
-    role: "Senior Full Stack",
-    description:
-      "Backend APIs and performant React frontend optimized for analytics and high-concurrency financial tracking.",
-    impact: "1M+ Transactions Processed",
-    url: "https://web.metricapp.co/login",
-    tech: ["React", "Node", "Postgres", "AWS"],
-    image: asset("/projects/metric.jpeg"),
   },
   {
     id: "merchant-visibility",
     title: "Merchant Visibility Agent",
+    subtitle: "SEO Audit Automation",
     role: "Workflow Engineer",
     description:
       "Automated SEO audit tool that scrapes Google Maps data to identify visibility gaps and trigger automated outreach.",
-    impact: "50+ Audits Weekly (Full Auto)",
+    impact: "50+ audits weekly, fully automated",
     url: "#",
     tech: ["n8n", "Puppeteer", "PostgreSQL"],
-    image: asset("/projects/merchant.png"),
   },
   {
     id: "health-insurance",
     title: "Health Insurance Agent",
+    subtitle: "RAG-Based Query System",
     role: "AI Solutions Lead",
     description:
       "RAG-based intelligent system connecting vector databases to insurance policy docs for natural language querying.",
-    impact: "90% Policy Query Accuracy",
+    impact: "90% policy query accuracy",
     url: "#",
     tech: ["n8n", "Pinecone", "LangChain"],
-    image: asset("/projects/health.png"),
   },
-
   {
     id: "sababa",
-    title: "Sababa Global – AI Ecosystem",
+    title: "Sababa Global",
+    subtitle: "AI Support Ecosystem",
     role: "AI Engineer",
     description:
       "AI-powered support automation with ChatGPT integration and real-time dashboards for customer success teams.",
-    impact: "65% Support Load Reduction",
+    impact: "65% support load reduction",
     url: "https://app.sababa.global/login",
     tech: ["Vue 3", "Node", "WebSockets"],
-    image: asset("/projects/sababa.png"),
+  },
+  {
+    id: "busichat-app",
+    title: "Busichat",
+    subtitle: "AI Business Platform",
+    role: "Full Stack Developer",
+    description:
+      "An AI powered platform integrating voice agents, workflow automation, and payment systems, built to streamline business operations and enhance user interaction.",
+    impact: "Voice + payment automation",
+    url: "#",
+    tech: ["Next.js", "Node", "OpenAI", "Twilio", "AWS"],
+  },
+  {
+    id: "private-ai-platform",
+    title: "Private AI Platform",
+    subtitle: "Multi-Model, Multi-Tenant",
+    role: "AI Architect",
+    description:
+      "A secure AI system leveraging agent based workflows and context aware retrieval, RAG, with vector embeddings and controlled access layers for scalable, accurate, and secure knowledge driven automation.",
+    impact: "Secure, agent based workflows",
+    url: "#",
+    tech: ["LLMs", "RAG", "Vector DBs"],
   },
 ];
 
 const skillGroups = [
-  { label: "Engineering", items: ["Next.js", "TypeScript", "Node.js"] },
-  { label: "Automation", items: ["n8n", "AI Agents", "LangChain"] },
-  { label: "Cloud", items: ["AWS", "Docker", "GCP"] },
+  { label: "Engineering", items: ["Next.js", "TypeScript", "Node.js", "Postgres"] },
+  { label: "Automation & AI", items: ["n8n", "AI Agents", "LangChain", "OpenAI"] },
+  { label: "Infrastructure", items: ["AWS", "Docker", "GCP", "Kubernetes"] },
+  { label: "CMS & SEO", items: ["WordPress", "Elementor", "Yoast SEO", "Local SEO"] },
+];
+
+const status = [
+  { label: "Based", value: "Remote, Pakistan" },
+  { label: "Experience", value: "5+ years" },
+  { label: "Focus", value: "Full stack, AI agents, SEO" },
+  { label: "Availability", value: "Open for consulting" },
 ];
 
 export default function PortfolioPage() {
   const [dark, setDark] = useState(true);
   const [query, setQuery] = useState("");
+  const [openId, setOpenId] = useState(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("prefers-dark");
@@ -87,238 +202,269 @@ export default function PortfolioPage() {
     localStorage.setItem("prefers-dark", JSON.stringify(dark));
   }, [dark]);
 
-  const filtered = projects.filter((p) =>
-    (p.title + p.description + p.tech.join(" "))
-      .toLowerCase()
-      .includes(query.toLowerCase()),
+  const filtered = useMemo(
+    () =>
+      projects.filter((p) =>
+        (p.title + p.subtitle + p.description + p.tech.join(" "))
+          .toLowerCase()
+          .includes(query.toLowerCase())
+      ),
+    [query]
   );
 
   return (
-    <div className="min-h-screen bg-[#fcfcfd] dark:bg-[#030712] text-slate-900 dark:text-slate-100 transition-colors duration-500 selection:bg-blue-500/30">
-      <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-600/5 blur-[120px] rounded-full animate-pulse" />
-        <div className="absolute bottom-[5%] left-[-5%] w-[400px] h-[400px] bg-indigo-600/5 blur-[100px] rounded-full" />
-      </div>
+    <div
+      className={`${mono.variable} ${sans.variable} min-h-screen transition-colors duration-300`}
+      style={{
+        background: "var(--bg)",
+        color: "var(--ink)",
+        fontFamily: "var(--font-sans)",
+      }}
+    >
+      <style jsx global>{`
+        :root {
+          --bg: #f2f1ec;
+          --bg-panel: #ffffff;
+          --ink: #14181f;
+          --ink-muted: #5b6069;
+          --line: #d8d6cd;
+          --accent: #b5772c;
+        }
+        .dark {
+          --bg: #0a0d12;
+          --bg-panel: #10141b;
+          --ink: #e7e3d8;
+          --ink-muted: #8a8f97;
+          --line: #232932;
+          --accent: #e8a33d;
+        }
+        .grid-field {
+          background-image:
+            linear-gradient(var(--line) 1px, transparent 1px),
+            linear-gradient(90deg, var(--line) 1px, transparent 1px);
+          background-size: 40px 40px;
+          opacity: 0.35;
+        }
+        .font-display {
+          font-family: var(--font-mono);
+        }
+      `}</style>
 
-      {/* --- NAVIGATION --- */}
-      <nav className="sticky top-0 z-50 backdrop-blur-xl bg-white/40 dark:bg-[#030712]/40 border-b border-slate-200 dark:border-slate-800">
-        <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-          <span className="text-xs font-black tracking-widest uppercase">
-            Tajnees.Dev
+      {/* Blueprint grid backdrop, one deliberate texture, used once */}
+      <div className="fixed inset-0 pointer-events-none -z-10 grid-field" />
+
+      <nav
+        className="sticky top-0 z-50 backdrop-blur-sm"
+        style={{ borderBottom: "1px solid var(--line)", background: "color-mix(in srgb, var(--bg) 85%, transparent)" }}
+      >
+        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+          <span className="font-display text-sm font-semibold tracking-tight">
+            tajnees<span style={{ color: "var(--accent)" }}>.</span>dev
           </span>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <button
               onClick={() => setDark(!dark)}
-              className="text-lg hover:scale-110 transition-transform"
+              className="text-xs font-display px-2 py-1"
+              style={{ color: "var(--ink-muted)" }}
+              aria-label="Toggle color theme"
             >
-              {dark ? "☀️" : "🌙"}
+              {dark ? "[ light ]" : "[ dark ]"}
             </button>
             <a
-              href={asset("/cv.pdf")}
-              download
-              className="text-[10px] font-bold bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors uppercase tracking-widest"
+              href="mailto:tajneesqamar123@gmail.com"
+              className="font-display text-xs hover:underline underline-offset-4"
+              style={{ color: "var(--accent)" }}
             >
-              Download CV
+              [ hire me ]
             </a>
           </div>
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-6 py-8 md:py-12 space-y-24">
-        {/* --- HERO SECTION (Tightened to fit screen) --- */}
-        <section className="grid lg:grid-cols-2 gap-8 items-center min-h-[60vh] md:min-h-0">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
-            <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-[1] mb-6 uppercase">
-              Automating <br />{" "}
-              <span className="text-blue-600 dark:text-blue-500 italic">
-                Intelligence.
-              </span>
-            </h1>
-            <p className="text-base md:text-lg text-slate-500 dark:text-slate-400 max-w-lg mb-8 leading-relaxed font-medium">
-              Senior Full Stack Developer specializing in{" "}
-              <span className="text-slate-900 dark:text-white underline decoration-blue-500/50 underline-offset-4">
-                agentic workflows
-              </span>{" "}
-              and high-concurrency systems.
+      <main className="max-w-5xl mx-auto px-6 py-16 space-y-24">
+        {/* Hero */}
+        <section className="grid md:grid-cols-[1.3fr_1fr] gap-10 items-start">
+          <div>
+            <p className="font-display text-sm mb-4" style={{ color: "var(--ink-muted)" }}>
+              Tajnees Qamar — Full Stack &amp; Automation Engineer
             </p>
+            <h1 className="font-display text-4xl md:text-5xl font-semibold leading-[1.1] tracking-tight mb-6">
+              I build the systems that run behind the scenes.
+            </h1>
+            <p className="text-base leading-relaxed max-w-md" style={{ color: "var(--ink-muted)" }}>
+              Senior full stack engineer building AI agents, product platforms, and the web
+              presence around them, from Next.js applications to WordPress builds with local SEO.
+            </p>
+          </div>
 
-            <div className="flex flex-wrap gap-4 mb-10">
-              <a
-                href="mailto:tajneesqamar123@gmail.com"
-                className="px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black tracking-widest text-[10px] uppercase hover:scale-105 transition-transform"
-              >
-                Hire Me
-              </a>
-              <a
-                href={asset("/cv.pdf")}
-                target="_blank"
-                download
-                className="px-6 py-3 border border-slate-200 dark:border-slate-800 rounded-xl font-black tracking-widest text-[10px] uppercase hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
-              >
-                View CV
-              </a>
-            </div>
-
-            <div className="grid grid-cols-3 gap-4">
-              {skillGroups.map((group) => (
-                <div key={group.label}>
-                  <p className="text-[9px] font-black uppercase text-blue-600 mb-1 tracking-widest">
-                    {group.label}
-                  </p>
-                  <p className="text-[10px] font-bold opacity-70 leading-tight uppercase">
-                    {group.items.join(" / ")}
-                  </p>
+          <div
+            className="p-6"
+            style={{ background: "var(--bg-panel)", border: "1px solid var(--line)" }}
+          >
+            <p className="font-display text-xs mb-4" style={{ color: "var(--ink-muted)" }}>
+              status
+            </p>
+            <dl className="space-y-3">
+              {status.map((row, i) => (
+                <div
+                  key={row.label}
+                  className="flex items-baseline justify-between text-sm pb-3"
+                  style={{
+                    borderBottom: i < status.length - 1 ? "1px solid var(--line)" : "none",
+                  }}
+                >
+                  <dt style={{ color: "var(--ink-muted)" }}>{row.label}</dt>
+                  <dd className="font-medium text-right">{row.value}</dd>
                 </div>
               ))}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative group hidden lg:block"
-          >
-            <div className="aspect-[16/10] bg-slate-200 dark:bg-slate-900 rounded-[2rem] overflow-hidden relative border border-slate-200 dark:border-slate-800 shadow-2xl transition-all duration-500 group-hover:border-blue-500/30">
-              <div className="absolute inset-0 flex items-center justify-center text-[120px] font-black opacity-[0.03] select-none italic tracking-tighter">
-                TQ
-              </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                <span className="text-[9px] font-black uppercase tracking-[0.4em] text-blue-500 mb-2">
-                  Availability
-                </span>
-                <p className="text-3xl font-black italic tracking-tighter uppercase mb-1">
-                  Remote / PK
-                </p>
-                <p className="text-xs font-bold opacity-50 uppercase tracking-widest underline decoration-green-500 decoration-2 underline-offset-4">
-                  Open for Consulting
-                </p>
-              </div>
-            </div>
-          </motion.div>
+            </dl>
+          </div>
         </section>
 
-        {/* --- PROJECTS SECTION --- */}
-        <section id="projects">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-            <div>
-              <h2 className="text-3xl font-black uppercase tracking-tighter italic">
-                Selected Works
-              </h2>
-              <div className="h-1 w-16 bg-blue-600 mt-2" />
-            </div>
+        {/* Toolbox */}
+        <section>
+          <h2 className="font-display text-xl font-semibold mb-6">Toolbox</h2>
+          <div
+            className="divide-y"
+            style={{ borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}
+          >
+            {skillGroups.map((group) => (
+              <div
+                key={group.label}
+                className="py-4 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-6"
+                style={{ borderColor: "var(--line)" }}
+              >
+                <span className="text-sm font-medium w-40 shrink-0">{group.label}</span>
+                <span className="text-sm" style={{ color: "var(--ink-muted)" }}>
+                  {group.items.join(" / ")}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Selected work, directory style */}
+        <section>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+            <h2 className="font-display text-xl font-semibold">Selected Work</h2>
             <input
               type="search"
-              placeholder="FILTER BY TECH..."
+              placeholder="filter by tech"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-6 py-2.5 rounded-full text-[10px] font-bold tracking-widest focus:ring-2 ring-blue-500/20 outline-none w-full md:w-72 uppercase"
+              className="font-display text-xs bg-transparent outline-none w-full sm:w-56 pb-2"
+              style={{ borderBottom: "1px solid var(--line)", color: "var(--ink)" }}
             />
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <AnimatePresence>
-              {filtered.map((p, i) => (
-                <motion.div
-                  key={p.id}
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ delay: i * 0.05 }}
-                  className="group flex flex-col h-full bg-white dark:bg-[#090e1a] border border-slate-200 dark:border-slate-800 rounded-[1.5rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500"
-                >
-                  <div className="relative h-40 bg-slate-100 dark:bg-slate-900">
-                    {p.image ? (
-                      <Image
-                        src={p.image}
-                        alt={p.title}
-                        fill
-                        className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                      />
-                    ) : (
-                      <div className="h-full flex items-center justify-center opacity-10 font-black">
-                        NO_IMG
+          <div style={{ borderTop: "1px solid var(--line)" }}>
+            {filtered.map((p, i) => {
+              const isOpen = openId === p.id;
+              return (
+                <div key={p.id} style={{ borderBottom: "1px solid var(--line)" }}>
+                  <button
+                    onClick={() => setOpenId(isOpen ? null : p.id)}
+                    className="w-full text-left py-5 flex items-start gap-4 group"
+                  >
+                    <span
+                      className="font-display text-xs mt-1 w-6 shrink-0"
+                      style={{ color: "var(--ink-muted)" }}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                        <h3 className="text-base font-semibold">{p.title}</h3>
+                        <span className="text-sm" style={{ color: "var(--ink-muted)" }}>
+                          {p.subtitle}
+                        </span>
                       </div>
-                    )}
-                    <div className="absolute top-3 left-3 px-2 py-1 bg-white/90 dark:bg-black/90 backdrop-blur-md rounded-lg text-[8px] font-black uppercase tracking-widest">
-                      {p.role}
-                    </div>
-                  </div>
-
-                  <div className="p-6 flex flex-col flex-grow">
-                    <h3 className="text-xl font-black tracking-tight mb-2 group-hover:text-blue-500 transition-colors uppercase">
-                      {p.title}
-                    </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-4 flex-grow">
-                      {p.description}
-                    </p>
-
-                    <div className="bg-blue-500/5 border border-blue-500/10 rounded-lg p-3 mb-4">
-                      <p className="text-[8px] font-black text-blue-500 uppercase tracking-widest mb-0.5">
-                        Impact
+                      <p className="text-xs mt-1" style={{ color: "var(--ink-muted)" }}>
+                        {p.role} · {p.tech.join(" / ")}
                       </p>
-                      <p className="text-[10px] font-bold italic">{p.impact}</p>
                     </div>
+                    <span
+                      className="font-display text-xs mt-1 shrink-0 transition-transform"
+                      style={{
+                        color: "var(--accent)",
+                        transform: isOpen ? "rotate(45deg)" : "none",
+                      }}
+                    >
+                      +
+                    </span>
+                  </button>
 
-                    <div className="flex items-center justify-between">
-                      <div className="flex gap-2">
-                        {p.tech.slice(0, 3).map((t) => (
-                          <span
-                            key={t}
-                            className="text-[8px] font-bold text-slate-400 uppercase tracking-tighter"
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                      <a
-                        href={p.url}
-                        className="text-[10px] font-black uppercase tracking-widest text-blue-500 hover:translate-x-1 transition-transform"
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: "easeInOut" }}
+                        className="overflow-hidden"
                       >
-                        Explore ↗
-                      </a>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                        <div className="pb-6 pl-10 pr-6">
+                          <p className="text-sm leading-relaxed max-w-2xl" style={{ color: "var(--ink-muted)" }}>
+                            {p.description}
+                          </p>
+                          <div className="flex flex-wrap items-center justify-between gap-4 mt-4">
+                            <p className="text-sm font-medium" style={{ color: "var(--accent)" }}>
+                              {p.impact}
+                            </p>
+                            {p.url !== "#" && (
+                              <a
+                                href={p.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-sm underline underline-offset-4"
+                              >
+                                View project
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
           </div>
         </section>
 
-        {/* --- CONTACT SECTION --- */}
-        <section className="bg-slate-900 text-white rounded-[2rem] p-10 md:p-16 text-center relative overflow-hidden shadow-2xl">
-          <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
-            <div className="absolute top-[-50%] left-[-20%] w-[100%] h-[100%] bg-blue-600 blur-[150px] rounded-full" />
-          </div>
-
-          <div className="relative z-10 space-y-6">
-            <h2 className="text-3xl md:text-5xl font-black italic uppercase tracking-tighter">
-              Ready to Automate?
-            </h2>
-            <div className="flex flex-col md:flex-row justify-center items-center gap-4">
-              <a
-                href="mailto:tajneesqamar123@gmail.com"
-                className="w-full md:w-auto px-8 py-4 bg-white text-slate-900 rounded-full font-black tracking-widest hover:scale-105 transition-transform text-[10px] uppercase"
-              >
-                Email Inquiry
-              </a>
-              <a
-                href="https://linkedin.com/in/tajnees-qamar-47138212a"
-                target="_blank"
-                className="w-full md:w-auto px-8 py-4 border border-white/20 rounded-full font-black tracking-widest hover:bg-white/10 transition-colors text-[10px] uppercase"
-              >
-                LinkedIn
-              </a>
-            </div>
+        {/* Contact */}
+        <section
+          className="p-8 md:p-12"
+          style={{ background: "var(--bg-panel)", border: "1px solid var(--line)" }}
+        >
+          <h2 className="font-display text-2xl font-semibold mb-3">Get in touch</h2>
+          <p className="text-sm max-w-md mb-6" style={{ color: "var(--ink-muted)" }}>
+            Open to full stack, automation, and WordPress or SEO focused work, remote, part time
+            or full time.
+          </p>
+          <div className="flex flex-wrap gap-6 text-sm">
+            <a
+              href="mailto:tajneesqamar123@gmail.com"
+              className="underline underline-offset-4"
+              style={{ color: "var(--accent)" }}
+            >
+              tajneesqamar123@gmail.com
+            </a>
+            <a
+              href="https://linkedin.com/in/tajnees-qamar-47138212a"
+              className="underline underline-offset-4"
+            >
+              LinkedIn
+            </a>
           </div>
         </section>
       </main>
 
-      <footer className="py-8 text-center opacity-30 text-[8px] font-black uppercase tracking-[0.5em]">
-        © {new Date().getFullYear()} Tajnees Qamar · System Established MMXXIV
+      <footer
+        className="py-10 text-center text-xs"
+        style={{ color: "var(--ink-muted)", borderTop: "1px solid var(--line)" }}
+      >
+        © {new Date().getFullYear()} Tajnees Qamar
       </footer>
     </div>
   );
