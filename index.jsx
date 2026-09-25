@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
- 
+
 // NOTE: Place your schematic images in public/projects/
 const projects = [
   {
@@ -36,11 +36,11 @@ const projects = [
   },
   {
     id: "metric",
-    title: "Metric – Fintech Dashboard",
+    title: "Metric – Financial Intelligence Platform",
     role: "Senior Full Stack",
-    description: "Backend APIs and performant React frontend optimized for analytics and high-concurrency financial tracking.",
+    description: "Frontend architecture and backend APIs for Metric, a financial intelligence platform where founders connect QuickBooks, Zoho, or Xero and ask Max, an AI CFO, plain language questions about cash flow, runway, and spending, built for high concurrency real time financial dashboards.",
     impact: "1M+ Transactions Processed",
-    url: "https://web.metricapp.co/login",
+    url: "https://metricapp.co/",
     tech: ["React", "Node", "Postgres", "AWS"],
     image: "/projects/metric.png",
   },
@@ -54,12 +54,23 @@ const projects = [
     tech: ["Vue 3", "Node", "WebSockets"],
     image: "/projects/sababa.png",
   },
+  {
+    id: "nexeng-aios",
+    title: "NexEng AIOS – AI Operating System",
+    role: "Product & Growth",
+    description: "AIOS is NexEng's AI operating system for fractional executives, legal, finance, and government, coordinating purpose built agents across email, documents, and client communication in cloud or on-premises deployments. Drove outbound sales strategy, GTM messaging, and demo delivery for the platform.",
+    impact: "580+ Leads Reached, 5 Demos Booked",
+    url: "https://nexeng.ai/",
+    tech: ["Next.js", "AI Agents", "GTM"],
+    image: "/projects/nexeng-aios.png",
+  },
 ];
 
 const skillGroups = [
   { label: "Engineering", items: ["Next.js", "TypeScript", "Node.js", "Postgres"] },
   { label: "Automation/AI", items: ["n8n", "AI Agents", "LangChain", "OpenAI"] },
   { label: "Infrastructure", items: ["AWS", "Docker", "GCP", "Kubernetes"] },
+  { label: "CMS/SEO", items: ["WordPress", "Elementor", "Yoast SEO", "Local SEO"] },
 ];
 
 export default function PortfolioPage() {
@@ -82,7 +93,7 @@ export default function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-[#fcfcfd] dark:bg-[#030712] text-slate-900 dark:text-slate-100 transition-colors duration-500 selection:bg-blue-500/30">
-      
+
       {/* Dynamic Background Blur */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-600/5 blur-[120px] rounded-full animate-pulse" />
@@ -104,7 +115,7 @@ export default function PortfolioPage() {
       </nav>
 
       <main className="max-w-7xl mx-auto px-6 py-20 space-y-32">
-        
+
         {/* Hero Section */}
         <section className="grid lg:grid-cols-2 gap-16 items-center">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
@@ -112,7 +123,7 @@ export default function PortfolioPage() {
               Automating <br/> <span className="text-blue-600 dark:text-blue-500 italic">Intelligence.</span>
             </h1>
             <p className="text-lg text-slate-500 dark:text-slate-400 max-w-lg mb-10 leading-relaxed font-medium">
-              Senior Full Stack Developer specializing in <span className="text-slate-900 dark:text-white underline decoration-blue-500/50 underline-offset-4">agentic workflows</span> and high-concurrency systems.
+              Senior Full Stack Developer specializing in <span className="text-slate-900 dark:text-white underline decoration-blue-500/50 underline-offset-4">agentic workflows</span>, high-concurrency systems, and end to end WordPress builds with local SEO.
             </p>
             <div className="grid grid-cols-2 gap-8">
               {skillGroups.slice(0, 2).map((group) => (
@@ -134,6 +145,22 @@ export default function PortfolioPage() {
                 </div>
             </div>
           </motion.div>
+        </section>
+
+        {/* Skills Section */}
+        <section>
+          <div className="mb-10">
+            <h2 className="text-4xl font-black uppercase tracking-tighter italic">Toolbox</h2>
+            <div className="h-1 w-20 bg-blue-600 mt-3" />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {skillGroups.map((group) => (
+              <div key={group.label} className="bg-white dark:bg-[#090e1a] border border-slate-200 dark:border-slate-800 rounded-2xl p-6">
+                <p className="text-[10px] font-black uppercase text-blue-600 mb-3 tracking-widest">{group.label}</p>
+                <p className="text-xs font-bold opacity-70 leading-relaxed uppercase">{group.items.join(" / ")}</p>
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* Project Section */}
@@ -180,7 +207,7 @@ export default function PortfolioPage() {
                     <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-6 flex-grow">
                       {p.description}
                     </p>
-                    
+
                     <div className="bg-blue-500/5 border border-blue-500/10 rounded-xl p-4 mb-6">
                       <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest mb-1">Business Impact</p>
                       <p className="text-xs font-bold italic">{p.impact}</p>
@@ -208,10 +235,10 @@ export default function PortfolioPage() {
             <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
                 <div className="absolute top-[-50%] left-[-20%] w-[100%] h-[100%] bg-blue-600 blur-[150px] rounded-full animate-pulse" />
             </div>
-            
+
             <div className="relative z-10 space-y-8">
                 <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter">Ready to Automate?</h2>
-                <p className="text-blue-200/60 max-w-lg mx-auto font-bold uppercase tracking-widest text-xs">Architecting solutions for high-growth startups.</p>
+                <p className="text-blue-200/60 max-w-lg mx-auto font-bold uppercase tracking-widest text-xs">Architecting solutions for high-growth startups, and hands on WordPress builds for local businesses.</p>
                 <div className="flex flex-col md:flex-row justify-center items-center gap-6">
                     <a href="mailto:tajneesqamar123@gmail.com" className="w-full md:w-auto px-10 py-5 bg-white text-slate-900 rounded-full font-black tracking-widest hover:scale-105 transition-transform text-xs uppercase">Email Inquiry</a>
                     <a href="https://linkedin.com/in/tajnees-qamar-47138212a" className="w-full md:w-auto px-10 py-5 border border-white/20 rounded-full font-black tracking-widest hover:bg-white/10 transition-colors text-xs uppercase">LinkedIn</a>
